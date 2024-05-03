@@ -43,23 +43,24 @@ async function modificarDOM(url) {
 
 
   nombreDePokemon.innerHTML = datosPokemon.name;
-  imagenPokemon.src = datosPokemon.sprites.front_default;
+  imagenPokemon.src = datosPokemon.sprites.other.home.front_default;
   tipoDePokemon.innerHTML = datosPokemon.types[0].type.name;
   //se agregan las habilidades
   const nombresHabilidades = datosPokemon.abilities.map(ability => ability.ability.name);
   const habilidadesTexto = nombresHabilidades.join(', ');
   habilidadesDePokemon.innerHTML = habilidadesTexto;
   const descripcionPokemon = await consultaApi(datosPokemon.species.url)
-  descripcionDePokemon.innerHTML = descripcionPokemon.flavor_text_entries[0].flavor_text;
+  const descripcionesEnEspanol = descripcionPokemon.flavor_text_entries.filter(entry => entry.language.name === "es");
+  descripcionDePokemon.innerHTML = descripcionesEnEspanol[0].flavor_text;
 
 
   const urlConsultaEvolucion = await consultaApi(descripcionPokemon.evolution_chain.url);
-  console.log(urlConsultaEvolucion)
+
   //Cambiar informacion cuando pokemon tiene evolucion
   if(datosPokemon.name != urlConsultaEvolucion.chain.evolves_to[0].species.name ){
     contenedorBotonEvolucionar.style.display = "block";
     nombreEvolucionPokemon = urlConsultaEvolucion.chain.evolves_to[0].species.name;
-    console.log(nombreEvolucionPokemon)
+
   }else{
     contenedorBotonEvolucionar.style.display = "none";
   }
