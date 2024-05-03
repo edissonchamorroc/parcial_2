@@ -54,10 +54,12 @@ async function modificarDOM(url) {
 
 
   const urlConsultaEvolucion = await consultaApi(descripcionPokemon.evolution_chain.url);
+  console.log(urlConsultaEvolucion)
   //Cambiar informacion cuando pokemon tiene evolucion
-  if(datosPokemon.name != urlConsultaEvolucion.chain.species.name ){
+  if(datosPokemon.name != urlConsultaEvolucion.chain.evolves_to[0].species.name ){
     contenedorBotonEvolucionar.style.display = "block";
-    nombreEvolucionPokemon = urlConsultaEvolucion.chain.species.name;
+    nombreEvolucionPokemon = urlConsultaEvolucion.chain.evolves_to[0].species.name;
+    console.log(nombreEvolucionPokemon)
   }else{
     contenedorBotonEvolucionar.style.display = "none";
   }
