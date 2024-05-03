@@ -70,8 +70,6 @@ async function modificarDOM(url) {
 }
 
 
-
-
 botonBusqueda.addEventListener("click", () => {
   const nombrePokemon = String(textoABuscar.value).toLowerCase();
   const url = `${baseUrlConsultaPokemon}/${nombrePokemon}`;
