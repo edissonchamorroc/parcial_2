@@ -12,8 +12,9 @@ const descripcionDePokemon = document.querySelector(".pokemonDescrition")
 const habilidadesDePokemon = document.querySelector(".pokemonAbilities")
 
 //Elementos evolucion
-const botonEvolucionar = document.querySelector(".containerEvolution")
-
+const contenedorBotonEvolucionar = document.querySelector(".containerEvolution")
+const botonEvolucionar = document.querySelector(".buttonEvolution")
+let nombreEvolucionPokemon;
 
 async function consultarPokemon(url) {
   try {
@@ -50,14 +51,15 @@ async function modificarDOM(url) {
   habilidadesDePokemon.innerHTML = habilidadesTexto;
   const descripcionPokemon = await consultaApi(datosPokemon.species.url)
   descripcionDePokemon.innerHTML = descripcionPokemon.flavor_text_entries[0].flavor_text;
-  //se habilita la informacion de la card
-  const urlConsultaEvolucion = await consultaApi(descripcionPokemon.evolution_chain.url);
 
+
+  const urlConsultaEvolucion = await consultaApi(descripcionPokemon.evolution_chain.url);
   //Cambiar informacion cuando pokemon tiene evolucion
   if(datosPokemon.name != urlConsultaEvolucion.chain.species.name ){
-    const datosEvolucion = urlConsultaEvolucion.chain.evolves_to[0].evolution_details[0]
-    botonEvolucionar.style.display = "block";
-    nombreDePokemon.innerHTML = urlConsultaEvolucion.chain.species.name;
+    contenedorBotonEvolucionar.style.display = "block";
+    nombreEvolucionPokemon = urlConsultaEvolucion.chain.species.name;
+  }else{
+    contenedorBotonEvolucionar.style.display = "none";
   }
   mensajeError.style.display = "none";
   contenidoPokemon.style.display = "block";
@@ -65,8 +67,16 @@ async function modificarDOM(url) {
 }
 
 
+
+
 botonBusqueda.addEventListener("click", () => {
-  const nombrePokemon = textoABuscar.value;
+  const nombrePokemon = String(textoABuscar.value).toLowerCase();
   const url = `${baseUrlConsultaPokemon}/${nombrePokemon}`;
   modificarDOM(url);
 });
+
+botonEvolucionar.addEventListener("click", () => {
+    const nombrePokemon = nombreEvolucionPokemon;
+    const url = `${baseUrlConsultaPokemon}/${nombrePokemon}`;
+    modificarDOM(url);
+  });
